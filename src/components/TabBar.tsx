@@ -1,7 +1,9 @@
 import React, { PureComponent } from "react";
-import { SafeAreaView, Dimensions, StyleSheet, Animated } from "react-native";
-import * as Svg from "react-native-svg";
+import { SafeAreaView, Dimensions, StyleSheet, Animated, View } from "react-native";
+import { Svg } from "expo";
 import * as shape from "d3-shape";
+
+import StaticTabBar, { tabHeight as height } from "./StaticTabBar";
 
 interface TabBarProps {}
 
@@ -16,7 +18,6 @@ const tabs = [
 const { width } = Dimensions.get("window");
 
 const tabWidth = width / tabs.length;
-const height = 64;
 const { Path } = Svg;
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
@@ -30,10 +31,7 @@ const tab = shape
   .x((d) => d.x)
   .y((d) => d.y)
   .curve(shape.curveBasis)([
-  {
-    x: width,
-    y: 0
-  },
+  { x: width, y: 0 },
   { x: width + 5, y: 0 },
   { x: width + 10, y: 10 },
   { x: width + 15, y: height },
@@ -50,6 +48,7 @@ const right = shape
   { x: width + tabWidth, y: 0 },
   { x: width * 2, y: 0 },
   { x: width * 2, y: height },
+  { x: 0, y: height },
   { x: 0, y: 0 }
 ]);
 
@@ -60,9 +59,14 @@ class TabBar extends PureComponent<TabBarProps> {
   render() {
     return (
       <>
-        <AnimatedSvg width={width * 2} {...{ height }}>
-          <Path {...{ d }} fill="white" />
-        </AnimatedSvg>
+        <View {...{ ...{ height, width } }}>
+          <AnimatedSvg width={width * 2} {...{ height }}>
+            <Path fill="white" {...{ d }} />
+          </AnimatedSvg>
+          <View style={StyleSheet.absoluteFill}>
+            <StaticTabBar {...{ tabs }} />
+          </View>
+        </View>
         <SafeAreaView style={styles.safeArea} />
       </>
     );
