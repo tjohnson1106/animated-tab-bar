@@ -55,8 +55,10 @@ const right = shape
 const d = `${left} ${tab} ${right}`;
 
 class TabBar extends PureComponent<TabBarProps> {
-  state = {};
+  value = new Animated.Value(0);
+
   render() {
+    const { value } = this;
     return (
       <>
         <View {...{ ...{ height, width } }}>
@@ -64,7 +66,7 @@ class TabBar extends PureComponent<TabBarProps> {
             <Path fill="white" {...{ d }} />
           </AnimatedSvg>
           <View style={StyleSheet.absoluteFill}>
-            <StaticTabBar {...{ tabs }} />
+            <StaticTabBar {...{ tabs, value }} />
           </View>
         </View>
         <SafeAreaView style={styles.safeArea} />
